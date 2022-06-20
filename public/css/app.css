@@ -887,6 +887,12 @@ select {
 .w-3\/5 {
   width: 60%;
 }
+.w-12 {
+  width: 3rem;
+}
+.w-11 {
+  width: 2.75rem;
+}
 .max-w-xl {
   max-width: 36rem;
 }
@@ -1248,6 +1254,10 @@ select {
 .text-2xl {
   font-size: 1.5rem;
   line-height: 2rem;
+}
+.text-xl {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
 }
 .font-medium {
   font-weight: 500;

@@ -37821,15 +37821,29 @@ __webpack_require__.r(__webpack_exports__);
   },
   emits: ['update:currentPage'],
   setup: function setup(__props, _ref) {
-    var expose = _ref.expose;
+    var expose = _ref.expose,
+        emit = _ref.emit;
     expose();
     var props = __props;
     var totalPages = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(function () {
       return Math.ceil(props.totalRecords / props.perPage);
     });
+
+    var updatePage = function updatePage(e) {
+      if (e.target.value === '') return;
+
+      if (totalPages < e.target.value) {
+        emit('update:currentPage', totalPages);
+      } else {
+        emit('update:currentPage', e.target.value > 0 ? e.target.value : 1);
+      }
+    };
+
     var __returned__ = {
       props: props,
       totalPages: totalPages,
+      emit: emit,
+      updatePage: updatePage,
       computed: vue__WEBPACK_IMPORTED_MODULE_0__.computed
     };
     Object.defineProperty(__returned__, '__isScriptSetup', {
@@ -38244,7 +38258,7 @@ __webpack_require__.r(__webpack_exports__);
     expose();
     var props = __props;
     var name = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(function () {
-      return props.stat.stat.name.replace('-', ' ');
+      return "".concat(props.stat.stat.name.replace('-', ' '));
     });
     var percentage = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(function () {
       return (props.stat.base_stat / 200 * 100).toFixed(2);
@@ -39031,12 +39045,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
 var _hoisted_1 = {
-  "class": "flex gap-2"
+  "class": "flex gap-2 items-center"
 };
 var _hoisted_2 = {
   disabled: "",
   "class": "bg-gray-400 disabled:cursor-not-allowed text-gray-800 font-semibold py-2 px-4 rounded"
 };
+var _hoisted_3 = {
+  "class": "flex items-center gap-2"
+};
+
+var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, "Go to Page", -1
+/* HOISTED */
+);
+
+var _hoisted_5 = ["onKeydown", "value"];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)(((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [$props.currentPage > 1 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
     key: 0,
@@ -39068,7 +39091,17 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onClick: _cache[3] || (_cache[3] = function ($event) {
       return _ctx.$emit('update:currentPage', $props.currentPage += 1);
     })
-  }, " Next ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 512
+  }, " Next ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [_hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    type: "text",
+    onKeydown: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withKeys)($setup.updatePage, ["enter"]),
+    "class": "w-12 rounded-lg",
+    onChange: $setup.updatePage,
+    value: $props.currentPage
+  }, null, 40
+  /* PROPS, HYDRATE_EVENTS */
+  , _hoisted_5)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, "of " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.totalPages), 1
+  /* TEXT */
+  )])], 512
   /* NEED_PATCH */
   )), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, $setup.totalPages > 1]]);
 }
@@ -39527,10 +39560,13 @@ var _hoisted_2 = {
   "class": "pl-2"
 };
 var _hoisted_3 = {
-  "class": "pr-2 w-3/5"
+  "class": "pr-2 w-3/5 flex items-center justify-between"
 };
 var _hoisted_4 = {
   "class": "w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700"
+};
+var _hoisted_5 = {
+  "class": "font-bold pl-2"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.name), 1
@@ -39542,7 +39578,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   }, null, 4
   /* STYLE */
-  )])])]);
+  )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.props.stat.base_stat), 1
+  /* TEXT */
+  )])]);
 }
 
 /***/ }),
@@ -40419,14 +40457,34 @@ __webpack_require__.r(__webpack_exports__);
 var _hoisted_1 = {
   "class": "h-screen grid place-items-center"
 };
+var _hoisted_2 = {
+  key: 1,
+  "class": "text-red-600 text-xl"
+};
+
+var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Go back to Pokemon List ");
+
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["Head"], {
     title: "Pokemon"
-  }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["Card"], {
+  }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [$props.pokemonData ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)($setup["Card"], {
+    key: 0,
     pokemon: $props.pokemonData
   }, null, 8
   /* PROPS */
-  , ["pokemon"])])], 64
+  , ["pokemon"])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_2, "Pokemon Not Found")), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["Link"], {
+    href: _ctx.route('home'),
+    "class": "bg-red-500 p-2 text-white font-bold text-xl rounded hover:bd-red-700"
+  }, {
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+      return [_hoisted_3];
+    }),
+    _: 1
+    /* STABLE */
+
+  }, 8
+  /* PROPS */
+  , ["href"])])], 64
   /* STABLE_FRAGMENT */
   );
 }

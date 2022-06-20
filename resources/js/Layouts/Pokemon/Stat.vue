@@ -9,7 +9,7 @@ const props = defineProps({
 })
 
 const name = computed(() => {
-  return props.stat.stat.name.replace('-', ' ')
+  return `${props.stat.stat.name.replace('-', ' ')}`
 })
 
 const percentage = computed(() => {
@@ -23,9 +23,12 @@ const percentage = computed(() => {
 <template>
   <div class="flex justify-between items-center">
     <div class="pl-2">{{ name }}</div>
-    <div class="pr-2 w-3/5">
+    <div class="pr-2 w-3/5 flex items-center justify-between">
       <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
         <div class="bg-gray-500 h-2.5 rounded-full" :style="{width: `${percentage}%` }"></div>
+      </div>
+       <div class="font-bold pl-2">
+        {{ props.stat.base_stat}}
       </div>
     </div>
   </div>
