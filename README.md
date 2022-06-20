@@ -10,3 +10,7 @@ Pasos para correr el proyecto (utilice php 8.1.6 y node v16.15.1)
 - php artisan migrate, para ejecutar las migraciones de BD
 
 Actualizar el .env para conexión de base de datos
+
+Pagina de prueba
+
+https://pokeapi.bemuss.com/
