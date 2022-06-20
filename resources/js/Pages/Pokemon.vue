@@ -1,5 +1,7 @@
 <script setup>
-import Card from '@/Layouts/Pokemon/Card.vue';
+import { Head, Link } from '@inertiajs/inertia-vue3';
+
+import Card from '@/Layouts/Pokemon/CardDetail.vue';
 import { provide, ref } from 'vue';
 
 

@@ -4,6 +4,7 @@ import { Link } from '@inertiajs/inertia-vue3';
 import connect from '@/Service/connect'
 import { inject, onMounted, ref, watch } from 'vue'
 import { useSwalCofirm } from '@/Composables/useSwal';
+import Stat from '@/Layouts/Pokemon/Stat.vue'
 
 const props = defineProps({
   pokemon: {
@@ -64,8 +65,8 @@ watch(isSuccessRemove, () => {
 <template>
   
   <div class="relative pt-32">
-    <div class="grid place-items-center bg-gray-100 rounded-lg shadow-lg shadow-gray-400/50 w-60">
-        <div class="w-48 -mt-32">
+    <div class="grid place-items-center bg-gray-100 rounded-lg shadow-lg shadow-gray-400/50 w-96">
+        <div class="w-72 -mt-32">
           <img :src="pokemon.sprites.other.home.front_default">
         </div>
         <div class="pt-2 w-full">
@@ -84,6 +85,18 @@ watch(isSuccessRemove, () => {
               <p>height</p>
             </div>
         </div>
+
+        <div class="text-2xl text-center text-gray-700 font-bold py-2 ">
+           Stats
+        </div>  
+
+        <div class="py-4">
+          <Stat v-for="stat in pokemon.stats" :stat="stat" :key="stat.name"></Stat>
+        </div>
+        
+         
+
+
         <div v-if="user" 
           class="flex text-sm justify-center gap-2 items-center pb-2 cursor-pointer text-gray-300"
           :class="{'text-gray-300': !favorite , 'text-red-600': favorite}"
