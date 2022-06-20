@@ -1,5 +1,7 @@
 ## Instalar
 
+Rama principal Master
+
 Pasos para correr el proyecto (utilice php 8.1.6 y node v16.15.1)
 
 - composer install para instalar dependecias del proyecto de laravel

@@ -19,9 +19,9 @@ function useAddFavorite() {
 
 function useRemoveFavorite(ref) {
   return useMutation(async (newFavorite) => {
-    const response = await window.axios.post(`/pokemon/unfavorite`, {
-      pokemon_id: newFavorite.id
-    })
+    let bodyFormData = new FormData()
+    bodyFormData.append('pokemon_id', newFavorite.pokemonId)
+    const response = await window.axios.post(`/pokemon/unfavorite`, bodyFormData)
     return response.data
   })
 }

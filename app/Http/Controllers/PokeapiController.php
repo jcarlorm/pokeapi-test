@@ -27,7 +27,6 @@ class PokeapiController extends Controller
             $pokemonsData[$pokemon['name']] = $pokemonsReponse[$pokemon['name']]->json();
         }
 
-        //return response()->json($pokemonsData);
         return response()->json(['pokemonsData' => $pokemonsData, 'pokemonsPaginate' => $pokemons]);
     }
 }

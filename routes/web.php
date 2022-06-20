@@ -19,6 +19,7 @@ use Inertia\Inertia;
 
 Route::get('/', [PokemonController::class, 'initPage'])->name('home');
 
+Route::get('/search/{search}', [PokemonController::class, 'search'])->name('search');
 
 Route::get('/favorites', [PokemonController::class, 'favoritesPage'])
 ->middleware(['auth'])->name('favorites');

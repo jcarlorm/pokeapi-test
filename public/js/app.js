@@ -37929,9 +37929,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _Service_connect__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/Service/connect */ "./resources/js/Service/connect.js");
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
-/* harmony import */ var _Composables_useSwalConfirm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/Composables/useSwalConfirm */ "./resources/js/Composables/useSwalConfirm.js");
+/* harmony import */ var _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @inertiajs/inertia-vue3 */ "./node_modules/@inertiajs/inertia-vue3/dist/index.js");
+/* harmony import */ var _Service_connect__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/Service/connect */ "./resources/js/Service/connect.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+/* harmony import */ var _Composables_useSwal__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/Composables/useSwal */ "./resources/js/Composables/useSwal.js");
+
 
 
 
@@ -37942,18 +37944,20 @@ __webpack_require__.r(__webpack_exports__);
       type: Object
     }
   },
+  emits: ['delete'],
   setup: function setup(__props, _ref) {
-    var expose = _ref.expose;
+    var expose = _ref.expose,
+        emit = _ref.emit;
     expose();
     var props = __props;
-    var favorite = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)(false);
-    var user = (0,vue__WEBPACK_IMPORTED_MODULE_1__.inject)('user');
+    var favorite = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)(false);
+    var user = (0,vue__WEBPACK_IMPORTED_MODULE_2__.inject)('user');
 
-    var _inject = (0,vue__WEBPACK_IMPORTED_MODULE_1__.inject)('favoritePokemons'),
+    var _inject = (0,vue__WEBPACK_IMPORTED_MODULE_2__.inject)('favoritePokemons'),
         favoriteList = _inject.favoriteList,
         addToList = _inject.addToList;
 
-    var _connect$useAddFavori = _Service_connect__WEBPACK_IMPORTED_MODULE_0__["default"].useAddFavorite(),
+    var _connect$useAddFavori = _Service_connect__WEBPACK_IMPORTED_MODULE_1__["default"].useAddFavorite(),
         isLoading = _connect$useAddFavori.isLoading,
         data = _connect$useAddFavori.data,
         isError = _connect$useAddFavori.isError,
@@ -37961,29 +37965,30 @@ __webpack_require__.r(__webpack_exports__);
         isSuccess = _connect$useAddFavori.isSuccess,
         mutateAdd = _connect$useAddFavori.mutate;
 
-    var _connect$useRemoveFav = _Service_connect__WEBPACK_IMPORTED_MODULE_0__["default"].useRemoveFavorite(),
+    var _connect$useRemoveFav = _Service_connect__WEBPACK_IMPORTED_MODULE_1__["default"].useRemoveFavorite(),
         isSuccessRemove = _connect$useRemoveFav.isSuccess,
         mutateRemove = _connect$useRemoveFav.mutate;
 
     var updateFavorite = function updateFavorite() {
-      if (favorite) {
+      if (!favorite.value) {
         mutateAdd({
           pokemonId: props.pokemon.id
         });
         favorite.value = true;
       } else {
-        useSwalCofirm().then(function (result) {
+        (0,_Composables_useSwal__WEBPACK_IMPORTED_MODULE_3__.useSwalCofirm)().then(function (result) {
           if (result.value) {
             mutateRemove({
               pokemonId: props.pokemon.id
             });
             favorite.value = false;
+            emit('delete', props.pokemon);
           }
         });
       }
     };
 
-    (0,vue__WEBPACK_IMPORTED_MODULE_1__.onMounted)(function () {
+    (0,vue__WEBPACK_IMPORTED_MODULE_2__.onMounted)(function () {
       var findPokemon = favoriteList.value.find(function (pokemon) {
         return pokemon.pokemon_id === props.pokemon.id;
       });
@@ -37992,15 +37997,19 @@ __webpack_require__.r(__webpack_exports__);
         favorite.value = true;
       }
     });
-    (0,vue__WEBPACK_IMPORTED_MODULE_1__.watch)(isSuccess, function () {
+    (0,vue__WEBPACK_IMPORTED_MODULE_2__.watch)(isSuccess, function () {
       if (isSuccess) {
-        addToList({
-          pokemon_id: props.pokemon.id
-        });
+        window.Swal.fire('Success', 'Pokemon added to favorites', 'success');
+      }
+    });
+    (0,vue__WEBPACK_IMPORTED_MODULE_2__.watch)(isSuccessRemove, function () {
+      if (isSuccessRemove) {
+        window.Swal.fire('Success', 'Pokemon removed from favorites', 'success');
       }
     });
     var __returned__ = {
       props: props,
+      emit: emit,
       favorite: favorite,
       user: user,
       favoriteList: favoriteList,
@@ -38014,12 +38023,13 @@ __webpack_require__.r(__webpack_exports__);
       isSuccessRemove: isSuccessRemove,
       mutateRemove: mutateRemove,
       updateFavorite: updateFavorite,
-      connect: _Service_connect__WEBPACK_IMPORTED_MODULE_0__["default"],
-      inject: vue__WEBPACK_IMPORTED_MODULE_1__.inject,
-      onMounted: vue__WEBPACK_IMPORTED_MODULE_1__.onMounted,
-      ref: vue__WEBPACK_IMPORTED_MODULE_1__.ref,
-      watch: vue__WEBPACK_IMPORTED_MODULE_1__.watch,
-      useSwalConfirm: _Composables_useSwalConfirm__WEBPACK_IMPORTED_MODULE_2__.useSwalConfirm
+      Link: _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_0__.Link,
+      connect: _Service_connect__WEBPACK_IMPORTED_MODULE_1__["default"],
+      inject: vue__WEBPACK_IMPORTED_MODULE_2__.inject,
+      onMounted: vue__WEBPACK_IMPORTED_MODULE_2__.onMounted,
+      ref: vue__WEBPACK_IMPORTED_MODULE_2__.ref,
+      watch: vue__WEBPACK_IMPORTED_MODULE_2__.watch,
+      useSwalCofirm: _Composables_useSwal__WEBPACK_IMPORTED_MODULE_3__.useSwalCofirm
     };
     Object.defineProperty(__returned__, '__isScriptSetup', {
       enumerable: false,
@@ -38482,6 +38492,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @inertiajs/inertia-vue3 */ "./node_modules/@inertiajs/inertia-vue3/dist/index.js");
+/* harmony import */ var _Layouts_Pokemon_Card_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/Layouts/Pokemon/Card.vue */ "./resources/js/Layouts/Pokemon/Card.vue");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+/* harmony import */ var _Components_Paginate_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/Components/Paginate.vue */ "./resources/js/Components/Paginate.vue");
+
+
+
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   __name: 'Favorites',
@@ -38489,16 +38505,67 @@ __webpack_require__.r(__webpack_exports__);
     canLogin: Boolean,
     canRegister: Boolean,
     favoritePokemons: Array,
-    user: Object
+    user: Object,
+    pokemonsData: Array
   },
   setup: function setup(__props, _ref) {
+    var _props$favoritePokemo;
+
     var expose = _ref.expose;
     expose();
     var props = __props;
+    var favoriteList = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)((_props$favoritePokemo = props.favoritePokemons) !== null && _props$favoritePokemo !== void 0 ? _props$favoritePokemo : []);
+    var perPage = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)(10);
+    var currentPage = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)(1);
+    var viewPokemons = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)(props.pokemonsData);
+
+    var pokemonsDataChunk = window._.chunk(viewPokemons.value, perPage.value);
+
+    var pokemonsCurrentData = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)(pokemonsDataChunk[currentPage.value - 1]);
+
+    function addToList(pokemon) {
+      favoriteList.value.push(pokemon);
+    }
+
+    (0,vue__WEBPACK_IMPORTED_MODULE_2__.watch)(currentPage, function (newValue) {
+      pokemonsCurrentData.value = pokemonsDataChunk[currentPage.value - 1];
+    });
+
+    function remove(pokemon) {
+      favoriteList.value = favoriteList.value.filter(function (item) {
+        return item.pokemon_id !== pokemon.id;
+      });
+      viewPokemons.value = viewPokemons.value.filter(function (item) {
+        return item.id !== pokemon.id;
+      });
+      pokemonsDataChunk.value = window._.chunk(viewPokemons.value, perPage.value);
+      console.log(pokemonsDataChunk.value[0]);
+      pokemonsCurrentData.value = pokemonsDataChunk.value[0];
+      currentPage.value = 1;
+    }
+
+    (0,vue__WEBPACK_IMPORTED_MODULE_2__.provide)('user', props.user);
+    (0,vue__WEBPACK_IMPORTED_MODULE_2__.provide)('favoritePokemons', {
+      favoriteList: favoriteList,
+      addToList: addToList
+    });
     var __returned__ = {
       props: props,
+      favoriteList: favoriteList,
+      perPage: perPage,
+      currentPage: currentPage,
+      viewPokemons: viewPokemons,
+      pokemonsDataChunk: pokemonsDataChunk,
+      pokemonsCurrentData: pokemonsCurrentData,
+      addToList: addToList,
+      remove: remove,
       Head: _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_0__.Head,
-      Link: _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_0__.Link
+      Link: _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_0__.Link,
+      Card: _Layouts_Pokemon_Card_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
+      provide: vue__WEBPACK_IMPORTED_MODULE_2__.provide,
+      ref: vue__WEBPACK_IMPORTED_MODULE_2__.ref,
+      watch: vue__WEBPACK_IMPORTED_MODULE_2__.watch,
+      Paginate: _Components_Paginate_vue__WEBPACK_IMPORTED_MODULE_3__["default"]
     };
     Object.defineProperty(__returned__, '__isScriptSetup', {
       enumerable: false,
@@ -38553,11 +38620,13 @@ __webpack_require__.r(__webpack_exports__);
       favoriteList: favoriteList,
       addToList: addToList
     });
+    var search = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)('');
     var __returned__ = {
       props: props,
       attrs: attrs,
       favoriteList: favoriteList,
       addToList: addToList,
+      search: search,
       Head: _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_0__.Head,
       Link: _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_0__.Link,
       Search: _Layouts_Pokemon_Search_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
@@ -38565,6 +38634,65 @@ __webpack_require__.r(__webpack_exports__);
       provide: vue__WEBPACK_IMPORTED_MODULE_2__.provide,
       ref: vue__WEBPACK_IMPORTED_MODULE_2__.ref,
       useAttrs: vue__WEBPACK_IMPORTED_MODULE_2__.useAttrs
+    };
+    Object.defineProperty(__returned__, '__isScriptSetup', {
+      enumerable: false,
+      value: true
+    });
+    return __returned__;
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Pages/Pokemon.vue?vue&type=script&setup=true&lang=js":
+/*!*******************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Pages/Pokemon.vue?vue&type=script&setup=true&lang=js ***!
+  \*******************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _Layouts_Pokemon_Card_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/Layouts/Pokemon/Card.vue */ "./resources/js/Layouts/Pokemon/Card.vue");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  __name: 'Pokemon',
+  props: {
+    canLogin: Boolean,
+    canRegister: Boolean,
+    favoritePokemons: Array,
+    user: Object,
+    pokemonData: Object
+  },
+  setup: function setup(__props, _ref) {
+    var _props$favoritePokemo, _props$user;
+
+    var expose = _ref.expose;
+    expose();
+    var props = __props;
+    var favoriteList = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)((_props$favoritePokemo = props.favoritePokemons) !== null && _props$favoritePokemo !== void 0 ? _props$favoritePokemo : []);
+
+    function addToList(pokemon) {
+      favoriteList.value.push(pokemon);
+    }
+
+    (0,vue__WEBPACK_IMPORTED_MODULE_1__.provide)('user', (_props$user = props.user) !== null && _props$user !== void 0 ? _props$user : null);
+    (0,vue__WEBPACK_IMPORTED_MODULE_1__.provide)('favoritePokemons', {
+      favoriteList: favoriteList,
+      addToList: addToList
+    });
+    var __returned__ = {
+      props: props,
+      favoriteList: favoriteList,
+      addToList: addToList,
+      Card: _Layouts_Pokemon_Card_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
+      provide: vue__WEBPACK_IMPORTED_MODULE_1__.provide,
+      ref: vue__WEBPACK_IMPORTED_MODULE_1__.ref
     };
     Object.defineProperty(__returned__, '__isScriptSetup', {
       enumerable: false,
@@ -38590,19 +38718,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
 var _hoisted_1 = {
-  viewBox: "0 0 316 316",
-  xmlns: "http://www.w3.org/2000/svg"
+  "class": "w-60",
+  src: "/pokemon.png",
+  alt: ""
 };
-
-var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("path", {
-  d: "M305.8 81.125C305.77 80.995 305.69 80.885 305.65 80.755C305.56 80.525 305.49 80.285 305.37 80.075C305.29 79.935 305.17 79.815 305.07 79.685C304.94 79.515 304.83 79.325 304.68 79.175C304.55 79.045 304.39 78.955 304.25 78.845C304.09 78.715 303.95 78.575 303.77 78.475L251.32 48.275C249.97 47.495 248.31 47.495 246.96 48.275L194.51 78.475C194.33 78.575 194.19 78.725 194.03 78.845C193.89 78.955 193.73 79.045 193.6 79.175C193.45 79.325 193.34 79.515 193.21 79.685C193.11 79.815 192.99 79.935 192.91 80.075C192.79 80.285 192.71 80.525 192.63 80.755C192.58 80.875 192.51 80.995 192.48 81.125C192.38 81.495 192.33 81.875 192.33 82.265V139.625L148.62 164.795V52.575C148.62 52.185 148.57 51.805 148.47 51.435C148.44 51.305 148.36 51.195 148.32 51.065C148.23 50.835 148.16 50.595 148.04 50.385C147.96 50.245 147.84 50.125 147.74 49.995C147.61 49.825 147.5 49.635 147.35 49.485C147.22 49.355 147.06 49.265 146.92 49.155C146.76 49.025 146.62 48.885 146.44 48.785L93.99 18.585C92.64 17.805 90.98 17.805 89.63 18.585L37.18 48.785C37 48.885 36.86 49.035 36.7 49.155C36.56 49.265 36.4 49.355 36.27 49.485C36.12 49.635 36.01 49.825 35.88 49.995C35.78 50.125 35.66 50.245 35.58 50.385C35.46 50.595 35.38 50.835 35.3 51.065C35.25 51.185 35.18 51.305 35.15 51.435C35.05 51.805 35 52.185 35 52.575V232.235C35 233.795 35.84 235.245 37.19 236.025L142.1 296.425C142.33 296.555 142.58 296.635 142.82 296.725C142.93 296.765 143.04 296.835 143.16 296.865C143.53 296.965 143.9 297.015 144.28 297.015C144.66 297.015 145.03 296.965 145.4 296.865C145.5 296.835 145.59 296.775 145.69 296.745C145.95 296.655 146.21 296.565 146.45 296.435L251.36 236.035C252.72 235.255 253.55 233.815 253.55 232.245V174.885L303.81 145.945C305.17 145.165 306 143.725 306 142.155V82.265C305.95 81.875 305.89 81.495 305.8 81.125ZM144.2 227.205L100.57 202.515L146.39 176.135L196.66 147.195L240.33 172.335L208.29 190.625L144.2 227.205ZM244.75 114.995V164.795L226.39 154.225L201.03 139.625V89.825L219.39 100.395L244.75 114.995ZM249.12 57.105L292.81 82.265L249.12 107.425L205.43 82.265L249.12 57.105ZM114.49 184.425L96.13 194.995V85.305L121.49 70.705L139.85 60.135V169.815L114.49 184.425ZM91.76 27.425L135.45 52.585L91.76 77.745L48.07 52.585L91.76 27.425ZM43.67 60.135L62.03 70.705L87.39 85.305V202.545V202.555V202.565C87.39 202.735 87.44 202.895 87.46 203.055C87.49 203.265 87.49 203.485 87.55 203.695V203.705C87.6 203.875 87.69 204.035 87.76 204.195C87.84 204.375 87.89 204.575 87.99 204.745C87.99 204.745 87.99 204.755 88 204.755C88.09 204.905 88.22 205.035 88.33 205.175C88.45 205.335 88.55 205.495 88.69 205.635L88.7 205.645C88.82 205.765 88.98 205.855 89.12 205.965C89.28 206.085 89.42 206.225 89.59 206.325C89.6 206.325 89.6 206.325 89.61 206.335C89.62 206.335 89.62 206.345 89.63 206.345L139.87 234.775V285.065L43.67 229.705V60.135ZM244.75 229.705L148.58 285.075V234.775L219.8 194.115L244.75 179.875V229.705ZM297.2 139.625L253.49 164.795V114.995L278.85 100.395L297.21 89.825V139.625H297.2Z"
-}, null, -1
-/* HOISTED */
-);
-
-var _hoisted_3 = [_hoisted_2];
 function render(_ctx, _cache) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("svg", _hoisted_1, _hoisted_3);
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("img", _hoisted_1);
 }
 
 /***/ }),
@@ -38741,7 +38862,7 @@ var _hoisted_2 = {
   "class": "bg-gray-400 disabled:cursor-not-allowed text-gray-800 font-semibold py-2 px-4 rounded"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [$props.currentPage > 1 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)(((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [$props.currentPage > 1 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
     key: 0,
     "class": "bg-white border-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded",
     onClick: _cache[0] || (_cache[0] = function ($event) {
@@ -38771,7 +38892,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onClick: _cache[3] || (_cache[3] = function ($event) {
       return _ctx.$emit('update:currentPage', $props.currentPage += 1);
     })
-  }, " Next ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]);
+  }, " Next ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 512
+  /* NEED_PATCH */
+  )), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, $setup.totalPages > 1]]);
 }
 
 /***/ }),
@@ -38929,6 +39052,13 @@ var _hoisted_18 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 /* HOISTED */
 );
 
+var _hoisted_19 = {
+  key: 1,
+  "class": "flex text-sm justify-center gap-1 items-center pb-2 cursor-pointer text-gray-300"
+};
+
+var _hoisted_20 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Register to create your favorites ");
+
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_font_awesome_icon = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("font-awesome-icon");
 
@@ -38969,7 +39099,19 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* STABLE_FRAGMENT */
   ))], 2
   /* CLASS */
-  )) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])])]);
+  )) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_19, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["Link"], {
+    href: _ctx.route('register'),
+    "class": "ml-4 text-sm text-gray-700 underline"
+  }, {
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+      return [_hoisted_20];
+    }),
+    _: 1
+    /* STABLE */
+
+  }, 8
+  /* PROPS */
+  , ["href"])]))])])]);
 }
 
 /***/ }),
@@ -38997,7 +39139,7 @@ var _hoisted_3 = {
   "class": "flex gap-8 flex-wrap justify-center"
 };
 var _hoisted_4 = {
-  "class": "flex justify-center pt-10"
+  "class": "flex justify-center pt-10 pb-2"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, " ...loading ", 512
@@ -39673,6 +39815,15 @@ var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNod
 
 var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Logout ");
 
+var _hoisted_5 = {
+  "class": "flex gap-8 flex-wrap justify-center"
+};
+
+var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" View all Pokemons ");
+
+var _hoisted_7 = {
+  "class": "flex justify-center pt-10 pb-2"
+};
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["Head"], {
     title: "Favorites"
@@ -39705,7 +39856,41 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   }, 8
   /* PROPS */
-  , ["href"])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])], 64
+  , ["href"])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [$setup.pokemonsCurrentData ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+    key: 0
+  }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($setup.pokemonsCurrentData, function (pokemon) {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)($setup["Card"], {
+      onDelete: $setup.remove,
+      pokemon: pokemon,
+      key: pokemon.id
+    }, null, 8
+    /* PROPS */
+    , ["pokemon"]);
+  }), 128
+  /* KEYED_FRAGMENT */
+  )) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)($setup["Link"], {
+    key: 1,
+    href: _ctx.route('home'),
+    "class": "text-lg font-bold text-white mt-60 bg-red-600 p-4 rounded"
+  }, {
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+      return [_hoisted_6];
+    }),
+    _: 1
+    /* STABLE */
+
+  }, 8
+  /* PROPS */
+  , ["href"]))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["Paginate"], {
+    totalRecords: $props.pokemonsData.length,
+    perPage: $setup.perPage,
+    currentPage: $setup.currentPage,
+    "onUpdate:currentPage": _cache[1] || (_cache[1] = function ($event) {
+      return $setup.currentPage = $event;
+    })
+  }, null, 8
+  /* PROPS */
+  , ["totalRecords", "perPage", "currentPage"])])])], 64
   /* STABLE_FRAGMENT */
   );
 }
@@ -39726,29 +39911,44 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
 var _hoisted_1 = {
-  "class": "flex items-top justify-end sm:items-center sm:pt-0"
+  "class": "flex items-top justify-between sm:items-center sm:pt-0"
 };
 var _hoisted_2 = {
-  key: 0,
-  "class": "hidden px-6 py-4 sm:block"
+  "class": "flex justify-center gap-2 pt-2 pl-20"
 };
 
-var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Favorites ");
+var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Search");
 
-var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Logout ");
+var _hoisted_4 = {
+  key: 0,
+  "class": "px-6 py-4"
+};
 
-var _hoisted_5 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Log in ");
+var _hoisted_5 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Favorites ");
 
-var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Register ");
+var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Logout ");
+
+var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Log in ");
+
+var _hoisted_8 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Register ");
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["Head"], {
     title: "Pokedex"
-  }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [$props.canLogin ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_2, [_ctx.$page.props.auth.user ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
-    key: 0
-  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["Link"], {
-    href: _ctx.route('favorites'),
-    "class": "text-sm text-gray-700 underline"
+  }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    type: "text",
+    "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
+      return $setup.search = $event;
+    }),
+    "class": "text-md outline-none border rounded-md p-1 w-80",
+    placeholder: "Pokemon name or id eg. Charizard"
+  }, null, 512
+  /* NEED_PATCH */
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.search]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["Link"], {
+    href: _ctx.route('search', {
+      'search': $setup.search
+    }),
+    "class": "bg-red-500 rounded p-2 text-white font-bold hover:bg-red-700"
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [_hoisted_3];
@@ -39758,9 +39958,23 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   }, 8
   /* PROPS */
+  , ["href"])]), $props.canLogin ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_4, [_ctx.$page.props.auth.user ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+    key: 0
+  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["Link"], {
+    href: _ctx.route('favorites'),
+    "class": "text-sm text-gray-700 underline"
+  }, {
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+      return [_hoisted_5];
+    }),
+    _: 1
+    /* STABLE */
+
+  }, 8
+  /* PROPS */
   , ["href"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["Link"], {
     href: _ctx.route('logout'),
-    onClick: _cache[0] || (_cache[0] = function ($event) {
+    onClick: _cache[1] || (_cache[1] = function ($event) {
       return _ctx.window.location.reload();
     }),
     method: "post",
@@ -39768,7 +39982,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "class": "ml-4 text-sm text-gray-700 underline"
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      return [_hoisted_4];
+      return [_hoisted_6];
     }),
     _: 1
     /* STABLE */
@@ -39784,7 +39998,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "class": "text-sm text-gray-700 underline"
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      return [_hoisted_5];
+      return [_hoisted_7];
     }),
     _: 1
     /* STABLE */
@@ -39797,7 +40011,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "class": "ml-4 text-sm text-gray-700 underline"
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      return [_hoisted_6];
+      return [_hoisted_8];
     }),
     _: 1
     /* STABLE */
@@ -39813,10 +40027,42 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
 /***/ }),
 
-/***/ "./resources/js/Composables/useSwalConfirm.js":
-/*!****************************************************!*\
-  !*** ./resources/js/Composables/useSwalConfirm.js ***!
-  \****************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Pages/Pokemon.vue?vue&type=template&id=3578f3ba":
+/*!************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Pages/Pokemon.vue?vue&type=template&id=3578f3ba ***!
+  \************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render)
+/* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+
+var _hoisted_1 = {
+  "class": "h-screen grid place-items-center"
+};
+function render(_ctx, _cache, $props, $setup, $data, $options) {
+  var _component_Head = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Head");
+
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Head, {
+    title: "Pokemon"
+  }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["Card"], {
+    pokemon: $props.pokemonData
+  }, null, 8
+  /* PROPS */
+  , ["pokemon"])])], 64
+  /* STABLE_FRAGMENT */
+  );
+}
+
+/***/ }),
+
+/***/ "./resources/js/Composables/useSwal.js":
+/*!*********************************************!*\
+  !*** ./resources/js/Composables/useSwal.js ***!
+  \*********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -39832,7 +40078,7 @@ function useSwalCofirm() {
     showCancelButton: true,
     confirmButtonColor: "#3085d6",
     cancelButtonColor: "#d33",
-    confirmButtonText: "Yes, delete it!"
+    confirmButtonText: "Yes, remove it!"
   });
 }
 
@@ -39945,21 +40191,21 @@ function useAddFavorite() {
 function useRemoveFavorite(ref) {
   return (0,vue_query__WEBPACK_IMPORTED_MODULE_0__.useMutation)( /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(newFavorite) {
-      var response;
+      var bodyFormData, response;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
-              _context3.next = 2;
-              return window.axios.post("/pokemon/unfavorite", {
-                pokemon_id: newFavorite.id
-              });
+              bodyFormData = new FormData();
+              bodyFormData.append('pokemon_id', newFavorite.pokemonId);
+              _context3.next = 4;
+              return window.axios.post("/pokemon/unfavorite", bodyFormData);
 
-            case 2:
+            case 4:
               response = _context3.sent;
               return _context3.abrupt("return", response.data);
 
-            case 4:
+            case 6:
             case "end":
               return _context3.stop();
           }
@@ -72761,6 +73007,34 @@ if (false) {}
 
 /***/ }),
 
+/***/ "./resources/js/Pages/Pokemon.vue":
+/*!****************************************!*\
+  !*** ./resources/js/Pages/Pokemon.vue ***!
+  \****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _Pokemon_vue_vue_type_template_id_3578f3ba__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Pokemon.vue?vue&type=template&id=3578f3ba */ "./resources/js/Pages/Pokemon.vue?vue&type=template&id=3578f3ba");
+/* harmony import */ var _Pokemon_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Pokemon.vue?vue&type=script&setup=true&lang=js */ "./resources/js/Pages/Pokemon.vue?vue&type=script&setup=true&lang=js");
+/* harmony import */ var _Users_jcrojas_Desktop_Code_interviews_cyberfull_test_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+
+
+
+
+;
+const __exports__ = /*#__PURE__*/(0,_Users_jcrojas_Desktop_Code_interviews_cyberfull_test_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Pokemon_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Pokemon_vue_vue_type_template_id_3578f3ba__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/Pages/Pokemon.vue"]])
+/* hot reload */
+if (false) {}
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__exports__);
+
+/***/ }),
+
 /***/ "./resources/js/Components/Button.vue?vue&type=script&setup=true&lang=js":
 /*!*******************************************************************************!*\
   !*** ./resources/js/Components/Button.vue?vue&type=script&setup=true&lang=js ***!
@@ -73029,6 +73303,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Pokeapp_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Pokeapp_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./Pokeapp.vue?vue&type=script&setup=true&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Pages/Pokeapp.vue?vue&type=script&setup=true&lang=js");
+ 
+
+/***/ }),
+
+/***/ "./resources/js/Pages/Pokemon.vue?vue&type=script&setup=true&lang=js":
+/*!***************************************************************************!*\
+  !*** ./resources/js/Pages/Pokemon.vue?vue&type=script&setup=true&lang=js ***!
+  \***************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Pokemon_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Pokemon_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./Pokemon.vue?vue&type=script&setup=true&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Pages/Pokemon.vue?vue&type=script&setup=true&lang=js");
  
 
 /***/ }),
@@ -73317,6 +73607,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Pokeapp_vue_vue_type_template_id_87019762__WEBPACK_IMPORTED_MODULE_0__.render)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Pokeapp_vue_vue_type_template_id_87019762__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./Pokeapp.vue?vue&type=template&id=87019762 */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Pages/Pokeapp.vue?vue&type=template&id=87019762");
+
+
+/***/ }),
+
+/***/ "./resources/js/Pages/Pokemon.vue?vue&type=template&id=3578f3ba":
+/*!**********************************************************************!*\
+  !*** ./resources/js/Pages/Pokemon.vue?vue&type=template&id=3578f3ba ***!
+  \**********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Pokemon_vue_vue_type_template_id_3578f3ba__WEBPACK_IMPORTED_MODULE_0__.render)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Pokemon_vue_vue_type_template_id_3578f3ba__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./Pokemon.vue?vue&type=template&id=3578f3ba */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Pages/Pokemon.vue?vue&type=template&id=3578f3ba");
 
 
 /***/ }),
@@ -74585,7 +74891,8 @@ var map = {
 	"./Auth/ResetPassword.vue": "./resources/js/Pages/Auth/ResetPassword.vue",
 	"./Auth/VerifyEmail.vue": "./resources/js/Pages/Auth/VerifyEmail.vue",
 	"./Favorites.vue": "./resources/js/Pages/Favorites.vue",
-	"./Pokeapp.vue": "./resources/js/Pages/Pokeapp.vue"
+	"./Pokeapp.vue": "./resources/js/Pages/Pokeapp.vue",
+	"./Pokemon.vue": "./resources/js/Pages/Pokemon.vue"
 };
 
 

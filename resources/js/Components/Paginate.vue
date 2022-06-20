@@ -26,7 +26,7 @@ defineEmits(['update:currentPage'])
 </script>
 
 <template>
-<div class="flex gap-2">
+<div class="flex gap-2" v-show="totalPages > 1">
   <button
     class="bg-white border-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded"
     v-if="currentPage > 1"

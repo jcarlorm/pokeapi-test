@@ -1,7 +1,6 @@
 
 
 export function useSwalCofirm() {
-
   return window.Swal.fire({
     title: "Are you sure?",
     text: "You won't be able to revert this!",
@@ -9,7 +8,6 @@ export function useSwalCofirm() {
     showCancelButton: true,
     confirmButtonColor: "#3085d6",
     cancelButtonColor: "#d33",
-    confirmButtonText: "Yes, delete it!"
+    confirmButtonText: "Yes, remove it!"
   })
-  
 }
