@@ -17,6 +17,7 @@ const props = defineProps({
   }
 })
 
+
 const totalPages = computed(() => {
   return Math.ceil(props.totalRecords / props.perPage)
 })
@@ -29,7 +30,7 @@ const updatePage = (e) => {
   if (totalPages < e.target.value) {
     emit('update:currentPage', totalPages)
   } else {
-    emit('update:currentPage', e.target.value > 0 ? e.target.value : 1)
+    emit('update:currentPage', e.target.value > 0 ? Number.parseInt(e.target.value) : 1)
   }
 }
 
